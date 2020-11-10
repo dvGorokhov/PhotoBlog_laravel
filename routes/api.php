@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\PhotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,5 +30,6 @@ Route::group([
     Route::post('reg', [AuthController::class,'reg']);
 
     Route::resource('category', CategoryController::class);
+    Route::resource('photo', PhotoController::class);
 });
 

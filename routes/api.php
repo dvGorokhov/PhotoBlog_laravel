@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,11 +15,6 @@ use App\Http\Controllers\AuthController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::group([
 
     'middleware' => 'api',
@@ -32,4 +28,6 @@ Route::group([
     Route::post('me', [AuthController::class,'me']);
     Route::post('reg', [AuthController::class,'reg']);
 
+    Route::resource('category', CategoryController::class);
 });
+

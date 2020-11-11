@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 
@@ -14,9 +15,9 @@ class PhotoController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $photo = Photo::all();
+        $photo = Photo::where('category_id',$request->category_id)->get();
         return $photo;
     }
 
@@ -30,11 +31,14 @@ class PhotoController extends Controller
      */
     public function store(Request $request)
     {
-        $photo = $request->url;
         
-        if ($photo) {
-        $new_photo = Photo::create([
+        $photo = $request->url;
+        $category_id = $request->category_id;
+
+        if ($photo && $category_id) {
+            $new_photo = Photo::create([
             'url' => $photo,
+            'category_id' => $category_id
           ]);
         } else {
             return response()->json(['err' => ['not found files']],400);
@@ -66,8 +70,14 @@ class PhotoController extends Controller
      */
     public function update(Request $request, Photo $photo)
     {
-        $photo->url = $request->url;
+       if ($request->url){
+           $photo->url = $request->url;
+       }
+       if ($request->category_id){
+           $photo->category_id = $request->category_id;
+       }
         $photo->save();
+       
     }
 
     /**

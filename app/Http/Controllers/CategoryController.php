@@ -28,12 +28,14 @@ class CategoryController extends Controller
     {
         $name = $request->name;
         $photo_id = $request->photo_id;
+        $cat_img_url = $request->cat_img_url;
 
-        if ($name && $photo_id) {
+        if ($name && $photo_id && $cat_img_url) {
 
         $category = Category::create([
             'name' => $name,
-            'photo_id' => $photo_id
+            'photo_id' => $photo_id,
+            'cat_img_url' => $cat_img_url
           ]);
  
         } else {
@@ -62,8 +64,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        $category->name = $request->name;
+        if (!$request->name && !$request->cat_img_url){
+            return response()->json(['err' => ['one of the fields is not entered']],400);
+         }
+        if ($request->name) {
+            $category->name = $request->name;
+        } 
+        
+        if ($request->cat_img_url){
+            $category->cat_img_url = $request->cat_img_url;
+        } 
         $category->save();
+       return true;
     }
 
     /**

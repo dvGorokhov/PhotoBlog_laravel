@@ -27,19 +27,28 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $name = $request->name;
-        $photo_id = $request->photo_id;
         $cat_img_url = $request->cat_img_url;
-
-        if ($name && $photo_id && $cat_img_url) {
-
-        $category = Category::create([
-            'name' => $name,
-            'photo_id' => $photo_id,
-            'cat_img_url' => $cat_img_url
-          ]);
- 
+        if (!$name && !$cat_img_url){
+            return response()->json(['err' => ['one of the fields is not entered']],400);
+         }
+        $category = Category::where('id',$request->id)->first();
+        if ($category) {
+            if ($name) {
+                $category->name = $name;
+            } 
+            if ($cat_img_url){
+                $category->cat_img_url = $cat_img_url;
+            } 
+            $category->save();
         } else {
-            return response()->json(['err' => ['not found files']],400);
+            if ( $name && $cat_img_url) {
+            $category = Category::create([
+                'name' => $name,
+                'cat_img_url' => $cat_img_url
+              ]);
+            } else {
+                return response()->json(['err' => ['not found files']],400);
+            }
         }
         return $category;
     }
